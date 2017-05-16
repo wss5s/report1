@@ -5,6 +5,15 @@ class OrdersController < ApplicationController
   # GET /orders.json
   def index
     @orders = Order.all
+
+    respond_to do |format|
+      format.html { render :index }
+      format.csv do
+        r = Reico::ReportDelivery.new(title: 'Orders', url: "http://localhost:3000/orders.json")
+        send_data r.to_csv, filename: "orders-#{Date.today}.csv"
+      end
+      format.json { render :index }
+    end
   end
 
   # GET /orders/1
