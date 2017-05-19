@@ -12,6 +12,10 @@ class OrdersController < ApplicationController
         r = Reico::ReportDelivery.new(title: 'Orders', url: "http://localhost:3000/orders.json")
         send_data r.to_csv, filename: "orders-#{Date.today}.csv"
       end
+      format.pdf do
+        r = Reico::ReportDelivery.new(title: 'Orders', url: "http://localhost:3000/orders.json")
+        send_data r.to_pdf.render, type: "application/pdf", disposition: "inline"
+      end
       format.json { render :index }
     end
   end
